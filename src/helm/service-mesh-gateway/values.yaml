@@ -1,0 +1,49 @@
+# ----------------------------------------------------------------------------------------------------------------------
+# System level properties
+# ----------------------------------------------------------------------------------------------------------------------
+system:
+  name: service-mesh-gateway
+  version: 1.0.0
+# ----------------------------------------------------------------------------------------------------------------------
+# OPC cluster properties
+# ----------------------------------------------------------------------------------------------------------------------
+cluster:
+  name: crc.testing
+  region: local
+# ----------------------------------------------------------------------------------------------------------------------
+# OpenShift service mesh (aka istio) properties
+#   NOTE:
+#   1) istio.gateway.hosts must match route.host
+# ----------------------------------------------------------------------------------------------------------------------
+istio:
+  enabled: true
+  gateway:
+    enabled: true
+    name: default-gateway
+    namespace: default
+    hosts:
+      - "my-app.apps-crc.testing"
+    tls:
+      enabled: false
+      mode: SIMPLE
+      credentialName: istio-tls
+      httpsRedirect: true
+      serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+      privateKey: /etc/istio/ingressgateway-certs/tls.key
+      caCertificates: /etc/istio/ingressgateway-ca-certs/ca-chain.cert.pem
+# ----------------------------------------------------------------------------------------------------------------------
+# OpenShift ingress route for the service mesh gateway
+#   NOTE:
+#   1) route.host must match istio.gateway.hosts
+# ----------------------------------------------------------------------------------------------------------------------
+route:
+  enabled: false
+  name: my-gateway-route
+  namespace: istio-system
+  host: my-app.apps-crc.testing
+  targetPort: http2
+  wildcard:
+    policy: None
+  tls:
+    termination: edge
+    insecurePolicy: None

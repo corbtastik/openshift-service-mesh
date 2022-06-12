@@ -1,0 +1,25 @@
+{{ if and .Values.route.enabled }}
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: {{ include "route.name" . }}
+  namespace: {{ .Values.route.namespace }}
+  labels:
+    {{- include "route.labels" . | nindent 4 }}
+    maistra.io/gateway-name: {{ .Values.istio.gateway.name }}
+    maistra.io/gateway-namespace: {{ .Values.istio.gateway.namespace }}
+  annotations:
+    maistra.io/original-host: '*'
+spec:
+  host: {{ .Values.route.host | quote }}
+  to:
+    kind: Service
+    name: istio-ingressgateway
+    weight: 100
+  port:
+    targetPort: {{ .Values.route.targetPort }}
+  tls:
+    termination: {{ .Values.route.tls.termination }}
+    insecureEdgeTerminationPolicy: {{ .Values.route.tls.insecurePolicy }}
+  wildcardPolicy:  {{ .Values.route.wildcard.policy }}
+{{ end }}

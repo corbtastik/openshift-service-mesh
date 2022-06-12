@@ -1,0 +1,9 @@
+apiVersion: project.openshift.io/v1
+kind: Project
+metadata:
+  name: $PROJECT
+  labels:
+    kubernetes.io/metadata.name: $PROJECT
+spec:
+  finalizers:
+    - kubernetes

@@ -1,0 +1,28 @@
+{{ if .Values.smcp.enabled }}
+apiVersion: maistra.io/v2
+kind: ServiceMeshControlPlane
+metadata:
+  name: {{ include "smcp.name" . }}
+  namespace: {{ .Values.smcp.namespace }}
+  labels:
+  {{- include "smcp.labels" . | nindent 4 }}
+spec:
+  version: v2.1
+  tracing:
+    type: Jaeger
+    sampling: 10000
+  addons:
+    jaeger:
+      name: jaeger
+      install:
+        storage:
+          type: Memory
+    kiali:
+      enabled: true
+      name: kiali
+    grafana:
+      enabled: true
+  gateways:
+    openshiftRoute:
+      enabled: false
+{{ end }}

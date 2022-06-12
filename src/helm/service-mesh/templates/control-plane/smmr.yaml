@@ -1,0 +1,13 @@
+{{ if .Values.smmr.enabled }}
+apiVersion: maistra.io/v1
+kind: ServiceMeshMemberRoll
+metadata:
+  name: {{ include "smmr.name" . }}
+  namespace: {{ .Values.smmr.namespace }}
+  labels:
+  {{- include "smcp.labels" . | nindent 4 }}
+spec:
+  members:{{- range .Values.smmr.members }}
+    - {{.}}
+  {{- end }}
+{{ end }}
