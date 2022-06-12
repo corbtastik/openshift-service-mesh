@@ -77,3 +77,11 @@ install-gateway:
 
 uninstall-gateway:
 	@helm uninstall --namespace $(APP_NAMESPACE) service-mesh-gateway-$(SMGW_RELEASE)
+
+# =============================================================================
+# Troubleshooting hacks
+# =============================================================================
+trouble:
+	istioctl -n $(SMCP_NAMESPACE) proxy-config listeners deploy/istio-ingressgateway
+	istioctl -n $(SMCP_NAMESPACE) proxy-config routes deploy/istio-ingressgateway
+	istioctl -n $(SMCP_NAMESPACE) proxy-config endpoints deploy/istio-ingressgateway
