@@ -13,11 +13,11 @@ spec:
         number: 80
         name: http
         protocol: HTTP
-      tls:
-        httpsRedirect: {{ .Values.istio.gateway.tls.httpsRedirect }}
       hosts:
       {{ toYaml .Values.istio.gateway.hosts }}
     {{- if .Values.istio.gateway.tls.enabled }}
+      tls:
+        httpsRedirect: {{ .Values.istio.gateway.tls.httpsRedirect }}
     - port:
         number: 443
         name: https
